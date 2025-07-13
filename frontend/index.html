@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Berat Badan Ideal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .gender-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .gender-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .gender-option input[type="radio"] {
+            display: none;
+        }
+
+        .gender-option label {
+            display: block;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0;
+        }
+
+        .gender-option input[type="radio"]:checked + label {
+            background: #4facfe;
+            color: white;
+            border-color: #4facfe;
+        }
+
+        .calculate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+
+        .results {
+            margin-top: 30px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #4facfe;
+        }
+
+        .results h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .result-value {
+            font-weight: 700;
+            color: #4facfe;
+            font-size: 1.1em;
+        }
+
+        .bmi-status {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: 600;
+            font-size: 1.2em;
+        }
+
+        .bmi-normal { background: #d4edda; color: #155724; }
+        .bmi-underweight { background: #cce5ff; color: #004085; }
+        .bmi-overweight { background: #fff3cd; color: #856404; }
+        .bmi-obese { background: #f8d7da; color: #721c24; }
+
+        .recommendation {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .recommendation h4 {
+            color: #2d3436;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .recommendation p {
+            color: #636e72;
+            line-height: 1.6;
+        }
+
+        .method-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .method-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .method-card h5 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .method-card .weight {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #4facfe;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .form-container {
+                padding: 25px;
+            }
+
+            .gender-group {
+                flex-direction: column;
+            }
+
+            .method-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏃‍♂️ Kalkulator Berat Badan Ideal</h1>
+            <p>Hitung berat badan ideal Anda dengan berbagai metode ilmiah</p>
+        </div>
+
+        <div class="form-container">
+            <form id="calculatorForm">
+                <div class="form-group">
+                    <label for="height">Tinggi Badan (cm)</label>
+                    <input type="number" id="height" name="height" min="100" max="250" step="0.1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="weight">Berat Badan Saat Ini (kg)</label>
+                    <input type="number" id="weight" name="weight" min="20" max="300" step="0.1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Umur (tahun)</label>
+                    <input type="number" id="age" name="age" min="10" max="120" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Jenis Kelamin</label>
+                    <div class="gender-group">
+                        <div class="gender-option">
+                            <input type="radio" id="male" name="gender" value="male" required>
+                            <label for="male">👨 Laki-laki</label>
+                        </div>
+                        <div class="gender-option">
+                            <input type="radio" id="female" name="gender" value="female" required>
+                            <label for="female">👩 Perempuan</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="calculate-btn">Hitung Berat Badan Ideal</button>
+            </form>
+
+            <div id="results" class="results hidden">
+                <h3>📊 Hasil Perhitungan</h3>
+                
+                <div class="result-item">
+                    <span class="result-label">BMI Saat Ini:</span>
+                    <span class="result-value" id="currentBMI">-</span>
+                </div>
+                
+                <div id="bmiStatus" class="bmi-status">
+                    <span id="bmiCategory">-</span>
+                </div>
+
+                <div class="method-comparison">
+                    <div class="method-card">
+                        <h5>Metode Broca</h5>
+                        <div class="weight" id="brocaWeight">-</div>
+                        <small>kg</small>
+                    </div>
+                    <div class="method-card">
+                        <h5>Metode BMI</h5>
+                        <div class="weight" id="bmiWeight">-</div>
+                        <small>kg</small>
+                    </div>
+                    <div class="method-card">
+                        <h5>Metode Robinson</h5>
+                        <div class="weight" id="robinsonWeight">-</div>
+                        <small>kg</small>
+                    </div>
+                    <div class="method-card">
+                        <h5>Metode Devine</h5>
+                        <div class="weight" id="devineWeight">-</div>
+                        <small>kg</small>
+                    </div>
+                </div>
+
+                <div class="result-item">
+                    <span class="result-label">Rata-rata Berat Ideal:</span>
+                    <span class="result-value" id="averageWeight">-</span>
+                </div>
+
+                <div class="result-item">
+                    <span class="result-label">BMR (Kebutuhan Kalori Harian):</span>
+                    <span class="result-value" id="bmrValue">-</span>
+                </div>
+
+                <div class="recommendation">
+                    <h4>💡 Rekomendasi</h4>
+                    <p id="recommendationText">-</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Implementasi JavaScript untuk perhitungan (mengikuti logika Motoko)
+        class BeratBadanIdealCalculator {
+            
+            // Menghitung berat badan ideal menggunakan rumus Broca
+            static hitungBroca(tinggi, gender) {
+                if (tinggi < 160) {
+                    return (tinggi - 100) - ((tinggi - 100) * 0.1);
+                } else {
+                    return (tinggi - 100) - ((tinggi - 100) * 0.15);
+                }
+            }
+
+            // Menghitung BMI
+            static hitungBMI(berat, tinggi) {
+                const tinggiMeter = tinggi / 100;
+                return berat / (tinggiMeter * tinggiMeter);
+            }
+
+            // Menghitung berat badan ideal berdasarkan BMI normal (22)
+            static hitungBeratIdealBMI(tinggi) {
+                const tinggiMeter = tinggi / 100;
+                return 22 * (tinggiMeter * tinggiMeter);
+            }
+
+            // Menghitung berat badan ideal menggunakan rumus Robinson
+            static hitungRobinson(tinggi, gender) {
+                if (gender === 'male') {
+                    return 52 + (1.9 * ((tinggi - 152.4) / 2.54));
+                } else {
+                    return 49 + (1.7 * ((tinggi - 152.4) / 2.54));
+                }
+            }
+
+            // Menghitung berat badan ideal menggunakan rumus Devine
+            static hitungDevine(tinggi, gender) {
+                if (gender === 'male') {
+                    return 50 + (2.3 * ((tinggi - 152.4) / 2.54));
+                } else {
+                    return 45.5 + (2.3 * ((tinggi - 152.4) / 2.54));
+                }
+            }
+
+            // Menentukan kategori berdasarkan BMI
+            static kategoriIMT(bmi) {
+                if (bmi < 18.5) {
+                    return { category: "Underweight (Kekurangan berat badan)", class: "bmi-underweight" };
+                } else if (bmi >= 18.5 && bmi < 25) {
+                    return { category: "Normal", class: "bmi-normal" };
+                } else if (bmi >= 25 && bmi < 30) {
+                    return { category: "Overweight (Kelebihan berat badan)", class: "bmi-overweight" };
+                } else if (bmi >= 30 && bmi < 35) {
+                    return { category: "Obese I (Obesitas tingkat 1)", class: "bmi-obese" };
+                } else if (bmi >= 35 && bmi < 40) {
+                    return { category: "Obese II (Obesitas tingkat 2)", class: "bmi-obese" };
+                } else {
+                    return { category: "Obese III (Obesitas tingkat 3)", class: "bmi-obese" };
+                }
+            }
+
+            // Menghitung BMR
+            static hitungBMR(tinggi, berat, umur, gender) {
+                if (gender === 'male') {
+                    return 88.362 + (13.397 * berat) + (4.799 * tinggi) - (5.677 * umur);
+                } else {
+                    return 447.593 + (9.247 * berat) + (3.098 * tinggi) - (4.330 * umur);
+                }
+            }
+
+            // Memberikan rekomendasi
+            static berikanRekomendasi(beratSekarang, beratIdeal) {
+                const selisih = beratSekarang - beratIdeal;
+                
+                if (Math.abs(selisih) <= 2) {
+                    return "Berat badan Anda sudah ideal! Pertahankan dengan pola makan sehat dan olahraga teratur.";
+                } else if (selisih > 2) {
+                    return `Berat badan Anda ${selisih.toFixed(1)} kg di atas ideal. Disarankan untuk mengurangi berat badan dengan diet sehat dan olahraga.`;
+                } else {
+                    return `Berat badan Anda ${Math.abs(selisih).toFixed(1)} kg di bawah ideal. Disarankan untuk menambah berat badan dengan pola makan bergizi.`;
+                }
+            }
+        }
+
+        // Event listener untuk form
+        document.getElementById('calculatorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const height = parseFloat(document.getElementById('height').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const age = parseInt(document.getElementById('age').value);
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+
+            // Perhitungan
+            const currentBMI = BeratBadanIdealCalculator.hitungBMI(weight, height);
+            const brocaWeight = BeratBadanIdealCalculator.hitungBroca(height, gender);
+            const bmiWeight = BeratBadanIdealCalculator.hitungBeratIdealBMI(height);
+            const robinsonWeight = BeratBadanIdealCalculator.hitungRobinson(height, gender);
+            const devineWeight = BeratBadanIdealCalculator.hitungDevine(height, gender);
+            const bmrValue = BeratBadanIdealCalculator.hitungBMR(height, weight, age, gender);
+            
+            const averageWeight = (brocaWeight + bmiWeight + robinsonWeight + devineWeight) / 4;
+            const bmiStatus = BeratBadanIdealCalculator.kategoriIMT(currentBMI);
+            const recommendation = BeratBadanIdealCalculator.berikanRekomendasi(weight, averageWeight);
+
+            // Menampilkan hasil
+            document.getElementById('currentBMI').textContent = currentBMI.toFixed(1);
+            document.getElementById('brocaWeight').textContent = brocaWeight.toFixed(1);
+            document.getElementById('bmiWeight').textContent = bmiWeight.toFixed(1);
+            document.getElementById('robinsonWeight').textContent = robinsonWeight.toFixed(1);
+            document.getElementById('devineWeight').textContent = devineWeight.toFixed(1);
+            document.getElementById('averageWeight').textContent = averageWeight.toFixed(1) + ' kg';
+            document.getElementById('bmrValue').textContent = bmrValue.toFixed(0) + ' kalori/hari';
+            document.getElementById('bmiCategory').textContent = bmiStatus.category;
+            document.getElementById('recommendationText').textContent = recommendation;
+
+            // Mengatur class untuk status BMI
+            const bmiStatusElement = document.getElementById('bmiStatus');
+            bmiStatusElement.className = 'bmi-status ' + bmiStatus.class;
+
+            // Menampilkan hasil
+            document.getElementById('results').classList.remove('hidden');
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
